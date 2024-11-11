@@ -44,3 +44,10 @@ jobs:
         docker build -t containerregistryanja.azurecr.io/microhackapp:1 -f Dockerfile . &&
         docker push containerregistryanja.azurecr.io/microhackapp:${{ steps.get_tag.outputs.image_tag }}
 
+    - name: Build and deploy Container App
+      uses: azure/container-apps-deploy-action@v1
+      with:
+        acrName: containerregistryanja
+        containerAppName: microhack-container-app-anja
+        resourceGroup: MicroHack-AppServiceToContainerApp
+        imageToDeploy: containerregistryanja.azurecr.io/app:${{ github.sha }}
