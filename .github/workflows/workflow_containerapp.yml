@@ -50,4 +50,4 @@ jobs:
         acrName: containerregistryanja
         containerAppName: microhack-container-app-anja
         resourceGroup: MicroHack-AppServiceToContainerApp
-        imageToDeploy: containerregistryanja.azurecr.io/app:${{ github.sha }}
+        imageToDeploy: containerregistryanja.azurecr.io/microhackapp:${{ steps.get_tag.outputs.image_tag }}
