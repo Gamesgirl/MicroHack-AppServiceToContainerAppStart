@@ -26,14 +26,7 @@ jobs:
         inlineScript: |
           az account show
           # You can write your Azure CLI inline scripts here.
-   
-    - uses: actions/checkout@v4
-    - name: Build and Push Image
-      run: |
-        az acr login --name containerregistryanja --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }} &&
-        docker build -t containerregistryanja.azurecr.io/microhackapp:1 -f Dockerfile . &&
-        docker push containerregistryanja.azurecr.io/microhackapp:1
-
+          
     - name: Get Latest Container Image Tag
       id: get_tag
       run: |
@@ -43,3 +36,11 @@ jobs:
         INCREMENTED_TAG=$((NUMERIC_TAG + 1))
         UPDATED_TAG=$(echo "$TAG" | sed "s/$NUMERIC_TAG/$INCREMENTED_TAG/")
         echo "image_tag=$UPDATED_TAG" >> $GITHUB_OUTPUT
+   
+    - uses: actions/checkout@v4
+    - name: Build and Push Image
+      run: |
+        az acr login --name containerregistryanja --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }} &&
+        docker build -t containerregistryanja.azurecr.io/microhackapp:1 -f Dockerfile . &&
+        docker push containerregistryanja.azurecr.io/microhackapp:${{ steps.get_tag.outputs.image_tag }}
+
